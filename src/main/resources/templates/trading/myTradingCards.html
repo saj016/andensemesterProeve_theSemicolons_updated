@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Deckforge hjemmeside">
+    <meta name="keywords" content="HTML, CSS, Deckforge, MTG, TCG, Magic The Gathering, cards, kort">
+    <meta name="author" content="Amalie Gravgaard Lange & Sara Holmberg Juul">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mine byttekort</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="background-image auth-background">
+<div class="wrapper">
+    <header>
+        <!-- header indhold -->
+        <div th:insert="~{parts/navigation:: nav}"></div>
+    </header>
+    <main>
+        <div class="container">
+            <h2>Mine kort, der er åbne til bytning</h2>
+            <h2><span th:text="|${#lists.size(tradingCards)} kort|">Antal kort</span></h2>
+        </div>
+
+        <section class="card-container">
+            <div class="card" th:each="tradingCard : ${tradingCards}">
+                <img th:src="${tradingCard.imageUrl}" th:alt="|Billede af ${tradingCard.name}|">
+                <div class="card-content">
+                    <h3 th:text="${tradingCard.name}"></h3>
+                    <p th:text="${tradingCard.set}"></p>
+                    <p th:text="${tradingCard.type}"></p>
+                    <p th:text="${tradingCard.rarity}"></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <div th:insert="~{parts/footer:: footer}"></div>
+</div>
+</body>
+
+</html>

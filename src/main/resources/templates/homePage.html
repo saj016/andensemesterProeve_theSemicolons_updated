@@ -43,6 +43,11 @@
                 <img th:src="@{image/deck.png}" alt="Illustration til min kortsamling">
             </div>
 
+            <div class="container" th:onclick="|window.location.href='@{/trading/myTradingCards}'|">
+                <h3>Mine byttekort</h3>
+                <img th:src="@{image/swap.png}" alt="Illustration til min kortsamling">
+            </div>
+
             <div class="container" th:if="${currentUser.title == T(org.example.andensemesterproeve_thesemicolons.domain.enums.Title_ENUM).Admin}" th:onclick="|window.location.href='@{/admin}'|">
                 <h3>Admin-side</h3>
                 <img th:src="@{image/admin.png}" alt="Illustration til admin">
