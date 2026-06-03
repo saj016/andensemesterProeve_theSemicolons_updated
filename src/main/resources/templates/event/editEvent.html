@@ -43,14 +43,33 @@
                        required>
 
                 <label>Dato:</label>
-                <input class="inputBox" type="date" id="date" name="date" th:value="${event.date != null} ? ${#temporals.format(event.date, 'yyyy-MM-dd')} : ''" required>
+                <input class="inputBox" type="date" id="date" name="date"
+                       th:value="${event.date != null} ? ${#temporals.format(event.date, 'yyyy-MM-dd')} : ''" required>
 
                 <label>Tidspunkt:</label>
-                <input class="inputBox" type="time" id="time" name="time" th:value="${event.time != null} ? ${#temporals.format(event.time, 'HH:mm')} : ''" required>
+                <input class="inputBox" type="time" id="time" name="time"
+                       th:value="${event.time != null} ? ${#temporals.format(event.time, 'HH:mm')} : ''" required>
 
                 <br><br>
                 <button class="submitButton" type="submit">Gem ændringer</button>
             </form>
+
+            <br>
+            <div th:if="${event.type == T(org.example.andensemesterproeve_thesemicolons.domain.enums.EventType_ENUM).Turnering}">
+                <form method="post" th:action="@{/editEvent/setEventWinner}">
+                    <input type="hidden" th:name="eventId" th:value="${event.id}">
+                    <label class="inputLabel">Vælg vinder:
+                        <select class="inputBox" name="userId">
+                            <option th:value="-1">Ingen vinder</option>
+                            <option th:each="user : ${event.participants}"
+                                    th:value="${user.id}"
+                                    th:text="${user.username}">
+                            </option>
+                        </select>
+                    </label>
+                    <button class="submitButton" type="submit">Opdatér vinder</button>
+                </form>
+            </div>
 
         </div>
     </main>

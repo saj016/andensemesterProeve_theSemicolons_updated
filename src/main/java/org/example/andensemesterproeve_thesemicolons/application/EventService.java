@@ -1,6 +1,7 @@
 package org.example.andensemesterproeve_thesemicolons.application;
 
 import org.example.andensemesterproeve_thesemicolons.domain.Event;
+import org.example.andensemesterproeve_thesemicolons.domain.User;
 import org.example.andensemesterproeve_thesemicolons.domain.enums.EventStatus_ENUM;
 import org.example.andensemesterproeve_thesemicolons.domain.interfacesRepo.IEventRepository;
 import org.example.andensemesterproeve_thesemicolons.exceptions.DataAccessException;
@@ -143,6 +144,31 @@ public class EventService {
     public void updateEvent(Event event) {
         try {
             eventRepository.updateEventInfo(event);
+        } catch (DataAccessException e) {
+            exceptionService.logException(e);
+            throw e;
+        } catch (Exception e) {
+            exceptionService.logException(e);
+            throw e;
+        }
+    }
+
+    public void setEventToNoWinner(int eventId) {
+        try {
+            eventRepository.clearEventLeaderboard(eventId);
+        } catch (DataAccessException e) {
+            exceptionService.logException(e);
+            throw e;
+        } catch (Exception e) {
+            exceptionService.logException(e);
+            throw e;
+        }
+    }
+
+    public void updateWinnerOfEvent(int winnerId, int eventId) {
+        try {
+            setEventToNoWinner(eventId);
+            eventRepository.registerWinnerOfEventByEventId(winnerId, eventId);
         } catch (DataAccessException e) {
             exceptionService.logException(e);
             throw e;

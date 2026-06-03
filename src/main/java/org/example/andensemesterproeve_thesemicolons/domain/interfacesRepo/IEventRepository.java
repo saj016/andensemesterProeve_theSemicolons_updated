@@ -33,4 +33,8 @@ public interface IEventRepository {
     void createEvent(Event event);
 
     void updateEventInfo(Event event);
+
+    void registerWinnerOfEventByEventId(int winnerId, int eventId);
+
+    void clearEventLeaderboard(int eventId);
 }

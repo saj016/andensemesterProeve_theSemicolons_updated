@@ -197,6 +197,7 @@ public class EventRepositoryMySql implements IEventRepository {
 
         return jdbcTemplate.query(sql, (rs, rowNum) ->
                 new User(
+                        rs.getInt("users.id"),
                         rs.getString("username")
                         ), eventId
         );
@@ -297,6 +298,37 @@ public class EventRepositoryMySql implements IEventRepository {
             );
         } catch (Exception e) {
             throw new DataAccessException("Error in updateEventInfo()", e);
+        }
+    }
+
+    @Override
+    public void registerWinnerOfEventByEventId(int winnerId, int eventId) {
+        try {
+            String sql = """
+                    UPDATE event_users
+                    SET leaderboard_placing = 1
+                    WHERE event_id = ?
+                    AND user_id = ?
+                    """;
+
+            jdbcTemplate.update(sql, eventId, winnerId);
+        } catch (Exception e) {
+            throw new DataAccessException("Error in registerWinnerOfEventByEventId()", e);
+        }
+    }
+
+    @Override
+    public void clearEventLeaderboard(int eventId) {
+        try {
+            String sql = """
+                    UPDATE event_users
+                    SET leaderboard_placing = null
+                    WHERE event_id = ?
+                    """;
+
+            jdbcTemplate.update(sql, eventId);
+        } catch (Exception e) {
+            throw new DataAccessException("Error in clearEventLeaderboard()", e);
         }
     }
 }

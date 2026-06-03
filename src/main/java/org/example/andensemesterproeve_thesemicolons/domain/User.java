@@ -29,7 +29,8 @@ public class User {
         this.title = title;
     }
 
-    public User(String username) {
+    public User(int id, String username) {
+        this.id = id;
         this.username = username;
     }
 

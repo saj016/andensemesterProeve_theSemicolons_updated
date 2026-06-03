@@ -119,4 +119,16 @@ public class EventController {
         eventService.updateEvent(event);
         return ("redirect:/myEvents");
     }
+
+    @PostMapping("/editEvent/setEventWinner")
+    public String submitEventWinner(@RequestParam(name = "userId") int winnerId,
+                                    @RequestParam(name = "eventId") int eventId) {
+
+        if (winnerId == -1) {
+            eventService.setEventToNoWinner(eventId);
+        } else {
+            eventService.updateWinnerOfEvent(winnerId, eventId);
+        }
+        return "redirect:/allEvents";
+    }
 }
