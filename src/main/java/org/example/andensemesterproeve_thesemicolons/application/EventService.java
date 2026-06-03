@@ -68,7 +68,9 @@ public class EventService {
 
     public Event getEventById(int eventId) {
         try {
-            return eventRepository.getEventById(eventId);
+            Event event = eventRepository.getEventById(eventId);
+            event.setParticipants(eventRepository.getEventParticipantsBasicInfoOnlyByEventId(eventId));
+            return event;
         } catch (EmptyResultDataAccessException e) {
             exceptionService.logException(e);
             throw e;

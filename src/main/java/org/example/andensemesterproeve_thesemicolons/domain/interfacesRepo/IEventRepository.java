@@ -1,6 +1,7 @@
 package org.example.andensemesterproeve_thesemicolons.domain.interfacesRepo;
 
 import org.example.andensemesterproeve_thesemicolons.domain.Event;
+import org.example.andensemesterproeve_thesemicolons.domain.User;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ public interface IEventRepository {
     boolean userIsAlreadySignedUp(int userId, int eventId);
 
     Event getEventById(int eventId);
+
+    List<User> getEventParticipantsBasicInfoOnlyByEventId(int eventId);
 
     int getNumberOfParticipantsFromId(int eventId);
 

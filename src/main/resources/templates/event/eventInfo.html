@@ -7,7 +7,7 @@
     <meta name="keywords" content="HTML, CSS, Deckforge, MTG, TCG, Magic The Gathering, cards, kort">
     <meta name="author" content="Amalie Gravgaard Lange & Sara Holmberg Juul">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AllEvents</title>
+    <title>Eventinformation</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="background-image auth-background">
@@ -17,28 +17,14 @@
     </header>
     <main>
         <div class="container">
-            <h2>Alle events</h2>
+            <h2 th:text="|${event.name} - information|">Eventinformation</h2>
         </div>
 
-        <form method="get" th:action="@{/allEvents}">
-            <label for="sortBy">Sorter events:
-                <select name="sortBy" id="sortBy" onchange="this.form.submit()" class="inputBox">
-                    <option value="none" th:selected="${selectedSort == 'none' || selectedSort==null}">Intet filter</option>
-                    <option value="date_desc" th:selected="${selectedSort == 'date_desc'}">Dato</option>
-                    <option value="openForSignUp" th:selected="${selectedSort == 'openForSignUp'}">Åben for tilmelding</option>
-                    <option value="casual" th:selected="${selectedSort == 'casual'}">Casual event</option>
-                    <option value="tournament" th:selected="${selectedSort == 'tournament'}">Turnering</option>
-                </select>
-            </label>
-        </form>
-
-        <div class="error" th:text="${error}"></div>
+        <button class="changePageButton" type="button" th:onclick="|window.location.href='@{/allEvents}'|">Tillbage til alle events</button>
 
         <section class="event-container">
-            <div class="card" th:each="event : ${events}">
+            <div class="card">
                 <div class="event-card-content">
-                    <h3 th:text="${event.name}">Type</h3>
-
                     <div class="event-details-row">
                         <div class="info-item">
                             <label>Type:</label>
@@ -69,14 +55,17 @@
                             <label>Event status:</label>
                             <p th:text="${event.eventStatus}">Event Status</p>
                         </div>
+
+                        <div class="info-item">
+                            <label>Antal tilmeldte:</label>
+                            <p th:text="|${#lists.size(event.participants)} / ${event.maxPlayers} deltagere|">Antal tilmeldte</p>
+                        </div>
+
                         <br>
                         <button class="changePageButton" type="button"
                                 th:onclick="|window.location.href='@{/signUp/myEvents/{id}(id=${event.id})}'|">Tilmeld
                         </button>
-                        <button class="changePageButton" type="button"
-                                th:onclick="|window.location.href='@{/allEvents/{id}(id=${event.id})}'|">Se mere
-                        </button>
-                        <div th:if="${session.currentUser.title == T(org.example.andensemesterproeve_thesemicolons.domain.enums.Title_ENUM).Admin}">
+                        <div th:if="${user.title == T(org.example.andensemesterproeve_thesemicolons.domain.enums.Title_ENUM).Admin}">
                             <button class="submitButton" type="button" th:onclick="|window.location.href='@{/editEvent/myEvents/{id}(id=${event.id})}'|">Redigér</button>
                         </div>
                     </div>

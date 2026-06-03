@@ -29,6 +29,10 @@ public class User {
         this.title = title;
     }
 
+    public User(String username) {
+        this.username = username;
+    }
+
     public int getId() {
         return id;
     }

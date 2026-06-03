@@ -186,7 +186,24 @@ public class EventRepositoryMySql implements IEventRepository {
         }
     }
 
+    @Override
+    public List<User> getEventParticipantsBasicInfoOnlyByEventId(int eventId) {
+        try {
+            String sql = """
+                SELECT users.id, username FROM users
+                JOIN event_users ON users.id = event_users.user_id
+                WHERE event_id = ?
+                """;
 
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                new User(
+                        rs.getString("username")
+                        ), eventId
+        );
+        } catch (Exception e) {
+            throw new DataAccessException("Error in getEventParticipantsBasicInfoOnlyByEventId()", e);
+        }
+    }
 
 
     @Override

@@ -51,6 +51,19 @@ public class EventController {
         return "event/allEvents";
     }
 
+    @GetMapping("/allEvents/{id}")
+    public String getEventPage(@PathVariable int id, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("event", eventService.getEventById(id));
+        model.addAttribute("user", user);
+
+        return "event/eventInfo";
+    }
+
     @GetMapping("/signUp/myEvents/{eventId}")
     public String signUpToEvent(@PathVariable("eventId") int eventId, HttpSession session, Model model) {
         User user = (User) session.getAttribute("currentUser");
