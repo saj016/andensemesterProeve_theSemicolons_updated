@@ -8,6 +8,7 @@ import org.example.andensemesterproeve_thesemicolons.exceptions.DataAccessExcept
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,7 +115,7 @@ public class EventService {
 
             Event event = eventRepository.getEventById(eventId);
             int currentNumberOfParticipants = eventRepository.getNumberOfParticipantsFromId(eventId);
-            if (currentNumberOfParticipants <= event.getMaxPlayers()) {
+            if (currentNumberOfParticipants < event.getMaxPlayers()) {
                 eventRepository.updateEventStatus(eventId, EventStatus_ENUM.Aaben_for_tilmelding.name());
             }
         } catch (EmptyResultDataAccessException e) {
@@ -141,9 +142,19 @@ public class EventService {
         }
     }
 
+    public void updateAllEventStatus(){
+        eventRepository.reopenModifiedDateEvents();
+        eventRepository.reopenModifiedMaxPlayersEvents();
+        eventRepository.updateStatusForOngoingEvents();
+        eventRepository.updateStatusForConcludedEvents();
+        eventRepository.updateStatusForFullyBookedEvents();
+
+    }
+
     public void updateEvent(Event event) {
         try {
             eventRepository.updateEventInfo(event);
+            updateAllEventStatus();
         } catch (DataAccessException e) {
             exceptionService.logException(e);
             throw e;
@@ -152,6 +163,8 @@ public class EventService {
             throw e;
         }
     }
+
+
 
     public void setEventToNoWinner(int eventId) {
         try {

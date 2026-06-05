@@ -240,6 +240,25 @@ public class EventRepositoryMySql implements IEventRepository {
     }
 
     @Override
+    public void updateStatusForFullyBookedEvents(){
+        String sql =  """
+                UPDATE events
+                SET event_status = 'Fuldt_booket'
+                WHERE events.max_players <= (
+                    SELECT COUNT(*)
+                    FROM event_users
+                    WHERE event_users.event_id = events.id
+                )
+                AND events.event_status != 'Fuldt_booket'
+                """;
+        try {
+            jdbcTemplate.update(sql);
+        } catch (Exception e) {
+            throw new DataAccessException("Error in updateStatusForFullyBookedEvents()", e);
+        }
+    }
+
+    @Override
     public void updateStatusForConcludedEvents() {
         String sql = """
                 UPDATE events
@@ -271,6 +290,38 @@ public class EventRepositoryMySql implements IEventRepository {
             throw new DataAccessException("Error in updateStatusForOngoingEvents()", e);
         }
 
+    }
+    @Override
+    public void reopenModifiedDateEvents(){
+        String sql =  """
+                UPDATE events
+                SET event_status = 'Aaben_for_tilmelding'
+                WHERE event_date >= DATE_ADD(CURDATE(), INTERVAL 1 DAY)
+                AND (event_status = 'Lukket_for_tilmelding' OR event_status = 'Afholdt')
+                """;
+        try {
+            jdbcTemplate.update(sql);
+        } catch (Exception e) {
+            throw new DataAccessException("Error in reopenModifiedDateEvents()", e);
+        }
+    }
+@Override
+    public void reopenModifiedMaxPlayersEvents(){
+        String sql =  """
+                UPDATE events
+                SET event_status = 'Aaben_for_tilmelding'
+                WHERE events.event_status = 'Fuldt_booket'
+                AND events.max_players > (
+                    SELECT COUNT(*)
+                    FROM event_users
+                    WHERE event_users.event_id = events.id
+                )
+                """;
+        try {
+            jdbcTemplate.update(sql);
+        } catch (Exception e) {
+            throw new DataAccessException("Error in reopenModifiedMaxPlayersEvents()", e);
+        }
     }
 
     @Override

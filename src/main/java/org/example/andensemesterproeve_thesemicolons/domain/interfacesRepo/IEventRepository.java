@@ -24,6 +24,12 @@ public interface IEventRepository {
 
     void updateStatusForOngoingEvents();
 
+    void updateStatusForFullyBookedEvents();
+
+    void reopenModifiedDateEvents();
+
+    void reopenModifiedMaxPlayersEvents();
+
     List<Event> findAllMyArrangedEvents(int userId);
 
     List<Event> findAllMySignedUpEvents(int userId);
