@@ -19,6 +19,7 @@
     <main>
         <div class="container">
             <h2>Redigér event</h2>
+
             <form method="post" th:action="@{/updateEvent}" th:object="${event}">
                 <input type="hidden" th:field="*{id}">
 
@@ -69,8 +70,9 @@
                     </label>
                     <button class="submitButton" type="submit">Opdatér vinder</button>
                 </form>
-            </div>
 
+            </div>
+            <button class="changePageButton" type="button" th:onclick="|window.location.href='@{/myEvents}'|">Tillbage til mine events</button>
         </div>
     </main>
     <div th:insert="~{parts/footer:: footer}"></div>
