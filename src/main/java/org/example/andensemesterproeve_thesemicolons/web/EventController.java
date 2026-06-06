@@ -29,7 +29,7 @@ public class EventController {
         List<Event> mySignedUpEvents = eventService.getAllMySignedUpEventsSorted(sortBy, user.getId());
         List<Event> myArrangedEventsFiltered = eventService.getAllMyArrangedEventsFiltered(myArrangedEvents, open, concluded);
         model.addAttribute("mySignedUpEvents", mySignedUpEvents);
-        model.addAttribute("myArrangedEvents", myArrangedEvents);
+       // model.addAttribute("myArrangedEvents", myArrangedEvents);
         model.addAttribute("selectedSort", sortBy);
         model.addAttribute("myArrangedEvents", myArrangedEventsFiltered);
         model.addAttribute("openParam", open);

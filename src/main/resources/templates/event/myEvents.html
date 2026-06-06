@@ -23,81 +23,91 @@
         <form method="get" th:action="@{/myEvents}">
             <label for="sortBy">Sorter events:
                 <select name="sortBy" id="sortBy" onchange="this.form.submit()" class="inputBox">
-                    <option value="none" th:selected="${selectedSort == 'none' || selectedSort==null}">Intet filter</option>
+                    <option value="none" th:selected="${selectedSort == 'none' || selectedSort==null}">Intet filter
+                    </option>
                     <option value="date_desc" th:selected="${selectedSort == 'date_desc'}">Dato</option>
-                    <option value="openForSignUp" th:selected="${selectedSort == 'openForSignUp'}">Åben for tilmelding</option>
+                    <option value="openForSignUp" th:selected="${selectedSort == 'openForSignUp'}">Åben for tilmelding
+                    </option>
                     <option value="casual" th:selected="${selectedSort == 'casual'}">Casual event</option>
                     <option value="tournament" th:selected="${selectedSort == 'tournament'}">Turnering</option>
                 </select>
             </label>
+
+            <div class="checkbox-group"
+                 th:if="${sessionUser.title == T(org.example.andensemesterproeve_thesemicolons.domain.enums.Title_ENUM).Admin or sessionUser.title == T(org.example.andensemesterproeve_thesemicolons.domain.enums.Title_ENUM).Arrangoer}">
+                <label>
+                    <input class="checkboxes" type="checkbox" name="open" value="true"
+                           onchange="this.form.submit()"
+                           th:checked="${openParam == 'true'}" style="margin-bottom:15px">
+                    Vis kommende events
+                </label>
+                <br>
+                <label>
+                    <input class="checkboxes" type="checkbox" name="concluded" value="true"
+                           onchange="this.form.submit()"
+                           th:checked="${concludedParam == 'true'}" style="margin-bottom:15px">
+                    Vis afsluttede events
+                </label>
+            </div>
+            <div th:if="${sessionUser.title == T(org.example.andensemesterproeve_thesemicolons.domain.enums.Title_ENUM).Admin or sessionUser.title == T(org.example.andensemesterproeve_thesemicolons.domain.enums.Title_ENUM).Arrangoer}">
+                <button class="changePageButton" type="button" th:onclick="|window.location.href='@{/addEvent}'|">Opret
+                    event
+                </button>
+            </div>
+
         </form>
 
 
         <div th:if="${sessionUser.title == T(org.example.andensemesterproeve_thesemicolons.domain.enums.Title_ENUM).Admin or sessionUser.title == T(org.example.andensemesterproeve_thesemicolons.domain.enums.Title_ENUM).Arrangoer}">
-            <button class="changePageButton" type="button" th:onclick="|window.location.href='@{/addEvent}'|">Opret event</button>
 
-                <div class="checkbox-group">
-                    <label>
-                        <input class="checkboxes" type="checkbox" name="open" value="true"
-                               onchange="this.form.submit()"
-                               th:checked="${openParam == 'true'}" style="margin-bottom:15px">
-                        Vis kommende events
-                    </label>
-                    <br>
-                    <label>
-                        <input class="checkboxes" type="checkbox" name="concluded" value="true"
-                               onchange="this.form.submit()"
-                               th:checked="${concludedParam == 'true'}" style="margin-bottom:15px">
-                        Vis afsluttede events
-                    </label>
-                </div>
+            <section class="event-container arranged-events">
+                <div class="card" th:each="event : ${myArrangedEvents}">
+                    <div class="event-card-content">
+                        <h3 th:text="${event.name}">Type</h3>
 
+                        <div class="event-details-row">
 
-
-                    <section class="event-container arranged-events">
-                        <div class="card" th:each="event : ${myArrangedEvents}">
-                            <div class="event-card-content">
-                                <h3 th:text="${event.name}">Type</h3>
-
-                                <div class="event-details-row">
-
-                                    <div class="info-item">
-                                        <label>Type:</label>
-                                        <p th:text="${event.type}">Type</p>
-                                    </div>
-
-                                    <div class="info-item">
-                                        <label>Format:</label>
-                                        <p th:text="${event.format}">Format</p>
-                                    </div>
-
-                                    <div class="info-item">
-                                        <label>Max antal Spillere:</label>
-                                        <p th:text="${event.maxPlayers}">Max antal spillere</p>
-                                    </div>
-
-                                    <div class="info-item">
-                                        <label>Dato:</label>
-                                        <p th:text="${event.date}">Dato</p>
-                                    </div>
-
-                                    <div class="info-item">
-                                        <label>Tidspunkt:</label>
-                                        <p th:text="${event.time}">Tid</p>
-                                    </div>
-
-                                    <div class="info-item">
-                                        <label>Event status:</label>
-                                        <p th:text="${event.eventStatus}">Event Status</p>
-                                    </div>
-                                    <br>
-                                    <button class="submitButton" type="button" th:onclick="|window.location.href='@{/editEvent/myEvents/{id}(id=${event.id})}'|">Redigér</button>
-
-                                </div>
+                            <div class="info-item">
+                                <label>Type:</label>
+                                <p th:text="${event.type}">Type</p>
                             </div>
+
+                            <div class="info-item">
+                                <label>Format:</label>
+                                <p th:text="${event.format}">Format</p>
+                            </div>
+
+                            <div class="info-item">
+                                <label>Max antal Spillere:</label>
+                                <p th:text="${event.maxPlayers}">Max antal spillere</p>
+                            </div>
+
+                            <div class="info-item">
+                                <label>Dato:</label>
+                                <p th:text="${event.date}">Dato</p>
+                            </div>
+
+                            <div class="info-item">
+                                <label>Tidspunkt:</label>
+                                <p th:text="${event.time}">Tid</p>
+                            </div>
+
+                            <div class="info-item">
+                                <label>Event status:</label>
+                                <p th:text="${event.eventStatus}">Event Status</p>
+                            </div>
+                            <br>
+                            <button class="submitButton" type="button"
+                                    th:onclick="|window.location.href='@{/editEvent/myEvents/{id}(id=${event.id})}'|">
+                                Redigér
+                            </button>
+
                         </div>
-                    </section>
-            </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
 
         <section class="event-container">
             <div class="card" th:each="event : ${mySignedUpEvents}">
@@ -136,7 +146,10 @@
                             <p th:text="${event.eventStatus}">Event Status</p>
                         </div>
                         <br>
-                        <button class="submitButton" type="button" th:onclick="|if(window.confirm('Er du sikker på du vil afmelde dig eventet?')) window.location.href='@{/cancelRegistration/myEvents/{id}(id=${event.id})}'|">Afmeld</button>
+                        <button class="submitButton" type="button"
+                                th:onclick="|if(window.confirm('Er du sikker på du vil afmelde dig eventet?')) window.location.href='@{/cancelRegistration/myEvents/{id}(id=${event.id})}'|">
+                            Afmeld
+                        </button>
 
                     </div>
                 </div>
